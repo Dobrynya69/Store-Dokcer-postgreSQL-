@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>{% block title %}GAme(Y) store{% endblock title %}</title>
+        {% block links %}{% endblock links %}
+    </head>
+    <body>
+        <div class="container">
+            {% block content %}
+            {% endblock content %}
+        </div>
+        {% block scripts %}{% endblock scripts %}
+    </body>
+</html>
