@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Login{% endblock title %}
+
+{% block content %}
+    <form action="{% url 'account_login' %}" method="post">
+        {% csrf_token %}
+        {{form|crispy}}
+        <input type="submit" value="Send" class='btn btn-success'>
+    </form>
+    <a title="Google" class="socialaccount_provider google" href="/accounts/google/login/?process=login">Google</a>
+{% endblock content %}
