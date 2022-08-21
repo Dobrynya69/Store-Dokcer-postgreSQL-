@@ -22,10 +22,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-_)m9)7r)n0-ybk=jh-akzs1bh&zwf@w)5%-#_-rqpplrjv%qn%'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = int(os.environ.get('DEBUG', default=0))
 
 ALLOWED_HOSTS = []
 
@@ -161,5 +161,8 @@ ACCOUNT_LOGOUT_REDIRECT = 'home'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 SOCIALACCOUNT_PROVIDERS = {'google':{'SCOPE': ['email'], 'AUTH_PARAMS': { 'access_type': 'online'}}}
+ACCOUNT_FORMS = {'signup': 'users.forms.CustomUserCreationForm'}
+SOCIALACCOUNT_FORMS = {'signup': 'users.forms.CustomSocialSignupForm'}
+SOCIALACCOUNT_AUTO_SIGNUP = False
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'

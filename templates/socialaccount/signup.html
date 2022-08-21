@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Social Signup{% endblock title %}
+
+{% block content %}
+    <h3>Social Signup</h3>
+    <form method="post">
+        {% csrf_token %}
+        {{form|crispy}}
+        <input type="submit" value="Accept" class="btn btn-success">
+    </form>
+{% endblock content %}
