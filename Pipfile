@@ -9,6 +9,8 @@ psycopg-binary = "*"
 psycopg2 = "*"
 django-allauth = "*"
 django-crispy-forms = "*"
+pillow = "*"
+requests = "*"
 
 [dev-packages]
 

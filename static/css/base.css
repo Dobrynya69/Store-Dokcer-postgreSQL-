@@ -42,3 +42,9 @@ form .btn{
 .homelink:hover{
     color: white;
 }
+.card{
+    border: 4px solid rgba(0, 0, 0, 0.905);
+}
+.card-body{
+    background-color: rgba(0, 0, 0, 0.852);
+}

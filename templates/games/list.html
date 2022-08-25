@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Game List{% endblock title %}
+
+{% block links %}
+    <link rel="stylesheet" href="{% static 'css/games/list.css' %}">
+    <link rel="stylesheet" href="{% static 'css/games/game.css' %}">
+{% endblock links %}
+
+{% block content %}
+    <div class="list-content">
+        <div class="list">
+            <h3>List</h3>
+            {% for game in games %}
+                {% include 'games/game.html' with game=game %}
+            {% endfor %}
+        </div>
+        <div class="filter">
+            <h3>Filters</h3>
+        </div>
+    </div>
+{% endblock content %}

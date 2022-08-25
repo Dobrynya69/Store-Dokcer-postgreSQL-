@@ -13,7 +13,7 @@ class CustomUserCreationForm(UserCreationForm):
 class CustomSocialSignupForm(SignupForm):
     password = forms.CharField(widget=forms.PasswordInput(), label='Password')
     first_name = forms.CharField(max_length=20, label='Name')
-
+    email = forms.EmailField(widget=forms.HiddenInput())
     def save(self, request):
         user = super(CustomSocialSignupForm, self).save(request)
         user.set_password(request.POST['password'])

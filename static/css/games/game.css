@@ -1,0 +1,13 @@
+.card{
+    width: calc(100% - 20px);
+    margin: 10px;
+    display: flex;
+    flex-direction: row;
+}
+.card img{
+    width: calc(30% - 20px);
+    height: calc(auto - 20px);
+    object-fit: cover;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.666);
+}

@@ -1,0 +1,36 @@
+{% load static %}
+{% if detail %}
+    <div class="card">
+        {% if game.image %}
+            <img src="{{game.image.url}}" alt="Game image">
+        {% else %}
+            <img src="{% static 'img/game.png' %}" alt="Game image">
+        {% endif %}
+        <div class="card-body">
+            <h3 class="card-title">{{game.name}}</h3>
+            <div class="card-text">{{game.description|safe}}</div>
+            <div class="card-footer text-muted">
+                Studio - <b>{{game.studio.name}}</b>
+            </div>
+            <div class="card-footer text-muted">
+                Playtime - <b>{{game.playtime}} hours</b>
+            </div>
+            <div class="card-footer text-muted">
+                Year - <b>{{game.year}}</b>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <div class="card">
+        {% if game.image %}
+            <img src="{{game.image.url}}" alt = "Game image">
+        {% else %}
+            <img src="{% static 'img/game.png' %}" alt = "Game image">
+        {% endif %}
+        <div class="card-body">
+            <h5 class="card-title"><b>{{game.name}}</b> - {{game.studio.name}}</h5>
+            <p class="card-text">{{game.playtime}} hours</p>
+            <a href="{% url 'game' game.pk %}" class="btn btn-secondary">More info!</a>
+        </div>
+    </div>
+{% endif %}

@@ -5,12 +5,15 @@ services:
       - postgres_data:/var/lib/postgresql/data/
     environment:
       - "POSTGRES_HOST_AUTH_METHOD=trust"
+      
   web:
     build: .
     command: python /code/manage.py runserver 0.0.0.0:8000
     environment:
       - SECRET_KEY=django-insecure-_)m9)7r)n0-ybk=jh-akzs1bh&zwf@w)5%-#_-rqpplrjv%qn%
       - DEBUG=1
+      - EMAIL_HOST_USER=djangoemailsends@gmail.com
+      - EMAIL_HOST_PASSWORD=qreppppnvrttqrym
     volumes:
       - .:/code
     ports:

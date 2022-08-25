@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Email confirm{% endblock title %}
+
+{% block content %}
+    <h3>Are you want to confirm {{email}} as your email for yser {{user_display}}</h3>
+    <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
+        {% csrf_token %}
+        <input type="submit" value="Yes!" class="btn btn-success">
+    </form>
+{% endblock content %}
