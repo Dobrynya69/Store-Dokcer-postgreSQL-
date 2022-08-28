@@ -28,7 +28,7 @@
             <img src="{% static 'img/game.png' %}" alt = "Game image">
         {% endif %}
         <div class="card-body">
-            <h5 class="card-title"><b>{{game.name}}</b> - {{game.studio.name}}</h5>
+            <h5 class="card-title"><b>{{game.name}}</b> - {{game.studio.name}} - {{game.year}}</h5>
             <p class="card-text">{{game.playtime}} hours</p>
             <a href="{% url 'game' game.pk %}" class="btn btn-secondary">More info!</a>
         </div>

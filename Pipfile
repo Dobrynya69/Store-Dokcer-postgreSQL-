@@ -11,6 +11,7 @@ django-allauth = "*"
 django-crispy-forms = "*"
 pillow = "*"
 requests = "*"
+django-filter = "*"
 
 [dev-packages]
 

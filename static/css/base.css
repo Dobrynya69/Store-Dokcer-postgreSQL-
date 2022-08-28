@@ -4,6 +4,25 @@
     font-family: sans-serif;
     color: white;
 }
+html{
+    overflow-x: hidden;
+}
+body{
+    position: relative;
+}
+.hide{
+    position: fixed;
+    top: -100%;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1031;
+    background-color: rgba(0, 0, 0, 0.864);
+    transition: 300ms;
+}
+.hide.trans{
+    top: 0;
+}
 .content{
     min-height: 100vh;
     padding-top: 60px;
@@ -12,6 +31,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    opacity: 1;
 }
 form .btn{
     width: 100%;
