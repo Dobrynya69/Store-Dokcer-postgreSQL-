@@ -1,7 +1,10 @@
+from datetime import datetime
 from distutils.command.upload import upload
+from urllib import request
 from django.db import models
 import uuid
 from django.urls import reverse
+from django.contrib.auth import get_user_model
 
 
 class Studio(models.Model):
@@ -27,5 +30,12 @@ class Game(models.Model):
 
     def get_absolute_url(self):
         return reverse('game', kwargs={'pk': self.pk})
+
+
+class Comment(models.Model):
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    text = models.TextField()
+    date = models.DateTimeField(default=datetime.now())
     
     

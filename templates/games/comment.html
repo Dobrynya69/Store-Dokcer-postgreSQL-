@@ -1,0 +1,21 @@
+{% load static %}
+{% load crispy_forms_tags %}
+<li class="list-group-item list-group-item-dark comment">
+    <h6>
+        <b>
+            {% if comment.user == request.user %}
+                <button class="btn btn-success btn-sm comment-edit">✎</button>
+                <a href="{% url 'comment_delete' pk=comment.pk %}" class="btn btn-danger btn-sm comment-delete">🗑</a>
+            {% endif %}
+            ({{comment.date}}) {{comment.user.first_name}} say: 
+        </b>
+    </h6>
+    <span>{{comment.text}}</span>
+    {% if comment.user == request.user %}
+        <form class="comment_edit_form" action="{% url 'comment_edit' pk=comment.pk %}" method="POST">
+            {% csrf_token %}
+            {{comment_form|crispy}}
+            <input value="Edit", type="submit", class="btn btn-secondary">
+        </form>
+    {% endif %}
+</li>

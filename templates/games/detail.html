@@ -7,8 +7,23 @@
 
 {% block links %}
     <link rel="stylesheet" href="{% static 'css/games/game.css' %}">
+    <link rel="stylesheet" href="{% static 'css/games/detail.css' %}">
 {% endblock links %}
 
 {% block content %}
     {% include 'games/game.html' with game=game detail=True %}
+    <form class="comment_form" action="{% url 'comment_create' pk=game.pk %}" method="POST">
+        {% csrf_token %}
+        {{comment_form|crispy}}
+        <input value="Send", type="submit", class="btn btn-secondary">
+    </form>
+    <ul class="list-group ">
+        {% for comment in comments %}
+            {% include 'games/comment.html' with comment=comment comment_form=comment_form %}
+        {% endfor %}
+    </ul>
 {% endblock content %}
+
+{% block scripts %}
+    <script src="{% static 'js\games\detail_ajax.js' %}"></script>
+{% endblock scripts %}

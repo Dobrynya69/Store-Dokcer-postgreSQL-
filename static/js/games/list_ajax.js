@@ -9,13 +9,18 @@ $(document).on('submit', '.filter_form', function(e) {
         contentType: false,
         processData: false,
         success: function(response){
-            document.querySelector(".hide").classList.add('trans')
-            setTimeout(() => {  
-                document.querySelector(".hide").classList.remove('trans')
-            }, 500);
-            setTimeout(() => {  
-                document.querySelector("html").innerHTML = response["html"]
-            }, 800);
+            if("html_error" in response){
+                document.querySelector("html").innerHTML = response["html_error"]
+            }
+            else{
+                document.querySelector(".hide").classList.add('trans')
+                setTimeout(() => {  
+                    document.querySelector(".list").innerHTML = response["html"]
+                }, 500);
+                setTimeout(() => {  
+                    document.querySelector(".hide").classList.remove('trans')
+                }, 800); 
+            }    
         }
     })
 });
@@ -31,13 +36,18 @@ document.querySelector("html").addEventListener('click', function(e) {
             contentType: false,
             processData: false,
             success: function(response){
-                document.querySelector(".hide").classList.add('trans')
-                setTimeout(() => {  
-                    document.querySelector(".hide").classList.remove('trans')
-                }, 500);
-                setTimeout(() => {  
-                    document.querySelector("html").innerHTML = response["html"]
-                }, 800);
+                if("html_error" in response){
+                    document.querySelector("html").innerHTML = response["html_error"]
+                }
+                else{
+                    document.querySelector(".hide").classList.add('trans')
+                    setTimeout(() => {  
+                        document.querySelector(".list").innerHTML = response["html"]
+                    }, 400);
+                    setTimeout(() => {  
+                        document.querySelector(".hide").classList.remove('trans')
+                    }, 700); 
+                }
             }
         })    
     }

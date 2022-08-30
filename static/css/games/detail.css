@@ -1,0 +1,28 @@
+.list-group.active{
+    opacity: 0.2;
+}
+.list-group{
+    opacity: 1;
+    transition: 300ms;
+    overflow: hidden;
+}
+form{
+    width: 100vh;
+}
+.list-group-item{
+    min-height: 120px;
+    position: relative;
+}
+.comment_edit_form{
+    position: absolute;
+    width: calc(100% - 55px);
+    height: calc(100%);
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.652);
+    top: 0;
+    left: -100%;
+    transition: 300ms;
+}
+.comment_edit_form.active{
+    left: 55px;
+}

@@ -17,11 +17,18 @@ body{
     width: 100vw;
     height: 100vh;
     z-index: 1031;
-    background-color: rgba(0, 0, 0, 0.864);
+    background-color: rgb(130, 79, 72);
     transition: 300ms;
+    text-align: center;
+    font-size: 5vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100%;
 }
 .hide.trans{
     top: 0;
+    border-radius: 0;
 }
 .content{
     min-height: 100vh;
@@ -67,4 +74,11 @@ form .btn{
 }
 .card-body{
     background-color: rgba(0, 0, 0, 0.852);
+}
+.list-group-item-dark{
+    background-color: rgba(0, 0, 0, 0.6);
+}
+.list-group{
+    width: calc(100% - 20px);
+    margin: 10px;
 }

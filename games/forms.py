@@ -32,3 +32,7 @@ class GameSortForm(forms.Form):
             choices = studio_choices(),
             required=False
     )
+
+
+class CommentCreateForm(forms.Form):
+    text = forms.CharField(widget=forms.TextInput(attrs={'placeholder':'Comment'}), label='')

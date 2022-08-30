@@ -13,21 +13,7 @@
 {% block content %}
     <div class="list-content">
         <div class="list">
-            <h3>List</h3>
-            {% for game in games %}
-                {% include 'games/game.html' with game=game %}
-            {% endfor %}
-            <ul class="pagination">
-                <li class="page-item"><a class="page-link" href="{% url 'game_list'%}?page=1">1...</a></li>
-                {% for i in paginate_range %}
-                    {% if i == page %}
-                        <li class="page-item active"><a class="page-link" href="{% url 'game_list'%}?page={{i}}">{{i}}</a></li>
-                    {% else %}
-                        <li class="page-item"><a class="page-link" href="{% url 'game_list'%}?page={{i}}">{{i}}</a></li>
-                    {% endif %}
-                {% endfor %}
-                <li class="page-item"><a class="page-link" href="{% url 'game_list'%}?page={{end_page}}">...{{end_page}}</a></li> 
-            </ul>
+            {% include 'games/list-template.html' with game=game paginate_range=paginate_range page=page end_page=end_page%}
         </div>
         <div class="filter">
             <h3>Filters</h3>
