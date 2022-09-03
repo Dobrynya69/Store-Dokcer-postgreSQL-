@@ -12,9 +12,7 @@ from django.template.loader import render_to_string
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 
-def paginate(max_objects, objects, page):
-    paginator = Paginator(objects, max_objects)
-
+def paginate(paginator, page):
     try:
         objects = paginator.page(page)
         return(objects)
@@ -23,8 +21,7 @@ def paginate(max_objects, objects, page):
         return(objects)
 
 
-def paginate_count(max_objects, objects):
-    paginator = Paginator(objects, max_objects)
+def paginate_count(paginator):
     return paginator.num_pages
 
 
@@ -67,20 +64,21 @@ class GamesListView(View):
         objects = self.model.objects.filter(
             studio__in=self.request.POST.getlist('studio', self.get_studios()),
             name__icontains=self.request.POST.get('name', ''),
-            ).order_by(self.request.POST.get('order', 'name'))
+            ).order_by(self.request.POST.get('order', 'name')).select_related('studio')
         return objects
     
 
     def get(self, request, *args, **kwargs):
         page = 1
-        objects = self.model.objects.all()
-        end_page = paginate_count(self.max_objects, objects)
+        objects = self.model.objects.order_by('name').select_related('studio')
+        paginator = Paginator(objects, self.max_objects)
+        end_page = paginate_count(paginator)
 
         return render(
             request=request,
             template_name="games/list.html",
             context={
-                'games': paginate(self.max_objects, objects, page), 
+                'games': paginate(paginator, page), 
                 'paginate_range': paginate_pages_range(page, 2, end_page),
                 'end_page': end_page,
                 'page': 1,
@@ -96,9 +94,10 @@ class GamesListView(View):
             except ValueError:
                 page = 1
 
-            if GameSortForm(request.POST).is_valid(): 
+            if GameSortForm(request.POST).is_valid():
                 objects = self.get_queryset()
-                end_page = paginate_count(self.max_objects, objects)
+                paginator = Paginator(objects, self.max_objects)
+                end_page = paginate_count(paginator)
                 filter_variables = ''
                 if request.POST.get('order') is not None:
                     filter_variables += f'order={request.POST.get("order")}&'
@@ -107,8 +106,9 @@ class GamesListView(View):
                 if request.POST.get('name') is not None:
                     filter_variables += f'name={request.POST.get("name")}&'
             else:
-                objects = self.model.objects.all()
-                end_page = paginate_count(self.max_objects, objects)
+                objects = self.model.objects.all().select_related('studio')
+                paginator = Paginator(objects, self.max_objects)
+                end_page = paginate_count(paginator)
                 filter_variables = ''
 
             if 1 > page or page > end_page:
@@ -118,7 +118,7 @@ class GamesListView(View):
                     request=request,
                     template_name="games/list-template.html",
                     context={
-                        'games': paginate(self.max_objects, objects, page), 
+                        'games': paginate(paginator, page), 
                         'paginate_range': paginate_pages_range(page, 2, end_page),
                         'end_page': end_page,
                         'page': page,
@@ -127,14 +127,15 @@ class GamesListView(View):
             return JsonResponse({'html': html}, status=200)
         else:
             page = 1
-            objects = self.model.objects.all()
-            end_page = paginate_count(self.max_objects, objects)
+            objects = self.model.objects.order_by('name').select_related('studio')
+            paginator = Paginator(objects, self.max_objects)
+            end_page = paginate_count(paginator)
 
             html = render_to_string(
                 request=request,
                 template_name="games/list.html",
                 context={
-                    'games': paginate(self.max_objects, objects, page), 
+                    'games': paginate(paginator, page), 
                     'paginate_range': paginate_pages_range(page, 2, end_page),
                     'end_page': end_page,
                     'page': 1,
@@ -144,7 +145,7 @@ class GamesListView(View):
             return JsonResponse({'html_error': html}, status=203)
         
 
-class GamesDetailView(DetailView):
+class GamesDetailView(LoginRequiredMixin, DetailView):
     model = Game
     template_name = 'games/detail.html'
     context_object_name = 'game'
@@ -153,14 +154,16 @@ class GamesDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['comment_form'] = CommentCreateForm()
-        game = self.get_object()
-        context['comments'] = Comment.objects.filter(game=game).order_by('-date')
+        game = self.object
+        context['comments'] = Comment.objects.filter(game=game).order_by('-date').select_related('user', 'game')
+        context['user_grade'] = game.get_grade_by_user(self.request.user)
+        context['grade_form'] = GradeForm()
         return context
 
 
 def get_comments(request, game, form):
     html = ''
-    comments = Comment.objects.filter(game=game).order_by('-date')
+    comments = Comment.objects.filter(game=game).order_by('-date').select_related('user', 'game')
     for comment_flex in comments:
         html += render_to_string(request=request, template_name='games/comment.html', context={'comment': comment_flex, 'comment_form': form})
     return html
@@ -215,6 +218,7 @@ class CommentEditView(LoginRequiredMixin, UserPassesTestMixin, View):
     model = Comment
     form_class = CommentCreateForm
 
+
     def post(self, request, *args, **kwargs):
         try:
             comment = self.model.objects.get(pk=self.kwargs['pk'])
@@ -243,3 +247,29 @@ class CommentEditView(LoginRequiredMixin, UserPassesTestMixin, View):
         comment_user = self.model.objects.get(pk=self.kwargs['pk']).user
         user = self.request.user
         return comment_user == user
+
+
+class GradeView(LoginRequiredMixin, View):
+    form_class = GradeForm
+
+    def post(self, request, *args, **kwargs):
+        if self.form_class(request.POST).is_valid():
+            try:
+                game = Game.objects.get(pk=kwargs['pk'])
+            except Game.DoesNotExist:
+                return JsonResponse({'error': 'Game does not exist'}, status=203)
+
+            grade = Grade.objects.get_or_create(user=request.user, game=game)[0]
+            grade.number = request.POST.get('number', 1)
+            grade.save()
+            html = render_to_string(
+                request=request, 
+                template_name='games/game.html', 
+                context={
+                    'game':game, 
+                    'detail':True, 
+                    'user_grade': game.get_grade_by_user(self.request.user), 
+                    'grade_form': GradeForm()})
+            return JsonResponse({'html': html}, status=200)
+        else:
+            return JsonResponse({'form_error': 'Number is not valid'}, status=203)

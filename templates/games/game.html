@@ -1,14 +1,29 @@
 {% load static %}
+{% load crispy_forms_tags %}
 {% if detail %}
     <div class="card">
         {% if game.image %}
-            <img src="{{game.image.url}}" alt="Game image">
+            <img src="{{game.image.url}}" alt="Game image" class="game_image">
         {% else %}
-            <img src="{% static 'img/game.png' %}" alt="Game image">
+            <img src="{% static 'img/game.png' %}" alt="Game image" class="game_image">
         {% endif %}
         <div class="card-body">
             <h3 class="card-title">{{game.name}}</h3>
             <div class="card-text">{{game.description|safe}}</div>
+            <div class="card-footer text-muted">
+                Stars - 
+                {% with '1 2 3 4 5' as list%}
+                    {% with game.get_grade as grade %}
+                        {% for i in list.split %}
+                            {% if i|slugify <= grade|slugify %}
+                                <img src={% static 'img/star_active.png' %} class="star">
+                            {% else %}
+                            <img src={% static 'img/star.png' %} class="star">
+                            {% endif %}
+                        {% endfor %}
+                    {% endwith %}
+                {% endwith %}
+            </div>
             <div class="card-footer text-muted">
                 Studio - <b>{{game.studio.name}}</b>
             </div>
@@ -18,19 +33,45 @@
             <div class="card-footer text-muted">
                 Year - <b>{{game.year}}</b>
             </div>
+            <form action="{% url 'grade' pk=game.pk%}" method="POST" class="grade_form">
+                {% csrf_token %}
+                {{grade_form|crispy}}
+                <input value="Send" type="submit" class="btn btn-secondary">
+            </form>
+            <div class='form_error'></div>
+            {% if user_grade > 0 %}
+                You already send your grade - {{user_grade}}. But you can change it
+            {% endif %}
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{% static 'js\games\game_ajax.js' %}"></script>
 {% else %}
     <div class="card">
         {% if game.image %}
-            <img src="{{game.image.url}}" alt = "Game image">
+            <img src="{{game.image.url}}" alt = "Game image" class="game_image">
         {% else %}
-            <img src="{% static 'img/game.png' %}" alt = "Game image">
+            <img src="{% static 'img/game.png' %}" alt = "Game image" class="game_image">
         {% endif %}
         <div class="card-body">
             <h5 class="card-title"><b>{{game.name}}</b> - {{game.studio.name}} - {{game.year}}</h5>
+            <h5 class="card-title">
+                {% with '1 2 3 4 5' as list%}
+                    {% with game.get_grade as grade %}
+                        {% for i in list.split %}
+                            {% if i|slugify <= grade|slugify %}
+                                <img src={% static 'img/star_active.png' %} class="star">
+                            {% else %}
+                            <img src={% static 'img/star.png' %} class="star">
+                            {% endif %}
+                        {% endfor %}
+                    {% endwith %}
+                {% endwith %}
+            </h5>
             <p class="card-text">{{game.playtime}} hours</p>
             <a href="{% url 'game' game.pk %}" class="btn btn-secondary">More info!</a>
         </div>
     </div>
 {% endif %}
+

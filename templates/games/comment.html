@@ -7,7 +7,13 @@
                 <button class="btn btn-success btn-sm comment-edit">✎</button>
                 <a href="{% url 'comment_delete' pk=comment.pk %}" class="btn btn-danger btn-sm comment-delete">🗑</a>
             {% endif %}
-            ({{comment.date}}) {{comment.user.first_name}} say: 
+            ({{comment.date}})
+            {% if comment.user.image %}
+                <img src="{{comment.user.image.url}}" alt="User image" class="user_image">
+            {% else %}
+                <img src="{% static 'img/userimage.jpg' %}" alt="User image" class="user_image">
+            {% endif %}
+            {{comment.user.first_name}} say: 
         </b>
     </h6>
     <span>{{comment.text}}</span>

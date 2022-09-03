@@ -6,9 +6,6 @@
     transition: 300ms;
     overflow: hidden;
 }
-form{
-    width: 100vh;
-}
 .list-group-item{
     min-height: 120px;
     position: relative;

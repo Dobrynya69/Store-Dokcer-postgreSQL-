@@ -36,3 +36,10 @@ class GameSortForm(forms.Form):
 
 class CommentCreateForm(forms.Form):
     text = forms.CharField(widget=forms.TextInput(attrs={'placeholder':'Comment'}), label='')
+
+
+class GradeForm(forms.ModelForm):
+    number = forms.IntegerField(min_value=1, max_value=5, label='', widget=forms.TextInput(attrs={'placeholder':'Send or change grade (1 - 5)'}))
+    class Meta:
+        model = Grade
+        fields = ('number',)

@@ -6,5 +6,6 @@ urlpatterns = [
     path('comment/<pk>/delete/', CommentDeleteView.as_view(), name='comment_delete'),
     path('comment/<pk>/edit/', CommentEditView.as_view(), name='comment_edit'),
     path('<pk>/comment/crete/', CommentCreateView.as_view(), name='comment_create'),
+    path('<pk>/grade/', GradeView.as_view(), name='grade'),
     path('<pk>/', GamesDetailView.as_view(), name='game'),
 ]

@@ -1,5 +1,6 @@
 from datetime import datetime
 from distutils.command.upload import upload
+from itertools import count
 from urllib import request
 from django.db import models
 import uuid
@@ -28,6 +29,28 @@ class Game(models.Model):
     def __str__(self):
         return self.name
 
+
+    def get_grade(self):
+        objects = Grade.objects.filter(game=self)
+        if objects.count() > 0:
+            grade = 0
+            for g in objects:
+                grade += g.number
+            grade = int(grade // objects.count())
+            return grade
+        else:
+            return 0
+
+
+    def get_grade_by_user(self, user):
+        try:
+            grade = Grade.objects.get(game=self, user=user)
+        except Grade.DoesNotExist:
+            return 0
+
+        return grade.number
+
+
     def get_absolute_url(self):
         return reverse('game', kwargs={'pk': self.pk})
 
@@ -37,5 +60,31 @@ class Comment(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     text = models.TextField()
     date = models.DateTimeField(default=datetime.now())
+
+
+    def __str__(self):
+        return f'{self.user} - {self.game} ({self.pk})'
+
+
+class Grade(models.Model):
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    number = models.PositiveSmallIntegerField(default=1)
+
+
+    def __str__(self):
+        return f'{self.user} - {self.game} ({self.pk})'
+
+    @staticmethod
+    def get_grate(game):
+        objects = Grade.objects.filter(game=game)
+        if objects.count() > 0:
+            grade = 0
+            for g in objects:
+                grade += g.number
+            grade = int(grade // objects.count())
+            return grade
+        else:
+            return 0
     
     

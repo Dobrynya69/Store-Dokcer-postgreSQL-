@@ -24,6 +24,11 @@
                         <ul class="navbar-nav mr-auto">
                             <li class="nav-item dropdown me-4">
                                 {% if user.is_authenticated %}
+                                    {% if user.image %}
+                                        <img src="{{user.image.url}}" alt="User image" class="user_image">
+                                    {% else %}
+                                        <img src="{% static 'img/userimage.jpg' %}" alt="User image" class="user_image">
+                                    {% endif %}
                                     <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                                         {{user.first_name}}
                                     </button>
@@ -36,6 +41,9 @@
                                     {% if user.is_authenticated %}
                                         <li>
                                             <a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="{% url 'user_edit' pk=user.pk%}">Edit</a>
                                         </li>
                                     {% else %}
                                         <li>

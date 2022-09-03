@@ -3,10 +3,12 @@
 {% block title %}Home{% endblock title %}
 
 {% block content %}
-    HOME
-    {{answer}}
-    <form action="{% url 'home' %}", method="POST">
-        {% csrf_token %}
-        <input type="submit", value="Give me game", class="btn btn-success">
-    </form>
+    <h3>GAme(Y) store</h3>
+    {% if user.is_authenticated %}
+        <h5>Hello {{user.first_name}}!</h5>
+        <h6>You can go to <a href="{% url 'game_list' %}">Game List</a></h6>
+    {% else %}
+        <h5>Oh no! You don`t authenticated.</h5>
+        <h6>You can <a href="{% url 'account_signup' %}">Sign Up</a> or <a href="{% url 'account_login' %}">LogIn</a></h6>
+    {% endif %}
 {% endblock content %}

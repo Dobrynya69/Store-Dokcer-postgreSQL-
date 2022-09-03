@@ -7,7 +7,7 @@
 
 {% block content %}
     <h3>Social Signup</h3>
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{form|crispy}}
         <input type="submit" value="Accept" class="btn btn-success">

@@ -11,7 +11,7 @@
 {% endblock links %}
 
 {% block content %}
-    {% include 'games/game.html' with game=game detail=True %}
+    <game>{% include 'games/game.html' with game=game detail=True grade_form=grade_form user_grade=user_grade%}</game>
     <form class="comment_form" action="{% url 'comment_create' pk=game.pk %}" method="POST">
         {% csrf_token %}
         {{comment_form|crispy}}
@@ -19,7 +19,7 @@
     </form>
     <ul class="list-group ">
         {% for comment in comments %}
-            {% include 'games/comment.html' with comment=comment comment_form=comment_form %}
+            {% include 'games/comment.html' with comment=comment comment_form=comment_form%}
         {% endfor %}
     </ul>
 {% endblock content %}

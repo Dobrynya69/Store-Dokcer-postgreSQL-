@@ -12,6 +12,7 @@ django-crispy-forms = "*"
 pillow = "*"
 requests = "*"
 django-filter = "*"
+django-debug-toolbar = "*"
 
 [dev-packages]
 
