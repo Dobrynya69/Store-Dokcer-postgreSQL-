@@ -13,6 +13,9 @@ pillow = "*"
 requests = "*"
 django-filter = "*"
 django-debug-toolbar = "*"
+whitenoise = "*"
+gunicorn = "*"
+dj-database-url = "*"
 
 [dev-packages]
 

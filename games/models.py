@@ -1,7 +1,4 @@
 from datetime import datetime
-from distutils.command.upload import upload
-from itertools import count
-from urllib import request
 from django.db import models
 import uuid
 from django.urls import reverse
@@ -63,7 +60,7 @@ class Comment(models.Model):
 
 
     def __str__(self):
-        return f'{self.user} - {self.game} ({self.pk})'
+        return f'{self.user} - {self.game} ({self.pk})' 
 
 
 class Grade(models.Model):
@@ -87,4 +84,11 @@ class Grade(models.Model):
         else:
             return 0
     
-    
+
+class FavoriteItem(models.Model):
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+
+
+    def __str__(self):
+        return f'{self.user} - {self.game} ({self.pk})' 

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Favorite list{% endblock title %}
+
+{% block links %}
+    <link rel="stylesheet" href="{% static 'css/games/game.css' %}">
+{% endblock links %}
+
+{% block content %}
+    {% if favorite_items %}
+        {% for item in favorite_items %}
+            {% include 'games/game.html' with game=item.game favorite=True%}
+        {% endfor %}
+    {% else %}
+        <h4>Its empty! You can choce youre favorite game in <a href="{% url 'game_list' %}">Game List</a></h4>
+    {% endif %}
+    
+{% endblock content %}
+{% block scripts %}
+    <script src="{% static 'js\games\favorites.js' %}"></script>
+{% endblock scripts %}

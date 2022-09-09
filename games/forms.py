@@ -1,7 +1,6 @@
 from django import forms
 from .models import *
 
-
 SORT_CHOICES =(
     ('name', 'Name↓'),
     ('-name', 'Name↑'), 
@@ -30,7 +29,7 @@ class GameSortForm(forms.Form):
     studio = forms.MultipleChoiceField(
             widget = forms.CheckboxSelectMultiple,
             choices = studio_choices(),
-            required=False
+            required=False,
     )
 
 

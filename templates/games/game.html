@@ -40,13 +40,31 @@
             </form>
             <div class='form_error'></div>
             {% if user_grade > 0 %}
-                You already send your grade - {{user_grade}}. But you can change it
+                You already send your grade - {{user_grade}}. But you can change it <br/>
+            {% endif %}
+            {% if is_favorite %}
+                <a class="btn btn-danger favorite-button" href="{% url 'favorite_item' game.pk %}">Remove favorite-</a>
+            {% else %}
+                <a class="btn btn-success favorite-button" href="{% url 'favorite_item' game.pk %}">Add favorite+</a>
             {% endif %}
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="{% static 'js\games\game_ajax.js' %}"></script>
+{% elif favorite %}
+    <div class="card">
+        {% if game.image %}
+            <img src="{{game.image.url}}" alt = "Game image" class="game_image">
+        {% else %}
+            <img src="{% static 'img/game.png' %}" alt = "Game image" class="game_image">
+        {% endif %}
+        <div class="card-body">
+            <h5 class="card-title"><b>{{game.name}}</b> - {{game.studio.name}} - {{game.year}}</h5>
+            <a href="{% url 'game' game.pk %}" class="btn btn-secondary">Watch</a><br/>
+            <a class="btn btn-danger favorite-button" href="{% url 'favorite_item' game.pk %}">Remove favorite-</a>
+        </div>
+    </div>
 {% else %}
     <div class="card">
         {% if game.image %}

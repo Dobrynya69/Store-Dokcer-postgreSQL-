@@ -158,6 +158,11 @@ class GamesDetailView(LoginRequiredMixin, DetailView):
         context['comments'] = Comment.objects.filter(game=game).order_by('-date').select_related('user', 'game')
         context['user_grade'] = game.get_grade_by_user(self.request.user)
         context['grade_form'] = GradeForm()
+        try:
+            favorite = FavoriteItem.objects.get(user=self.request.user, game=game)
+            context['is_favorite'] = True
+        except FavoriteItem.DoesNotExist:
+            context['is_favorite'] = False
         return context
 
 
@@ -273,3 +278,33 @@ class GradeView(LoginRequiredMixin, View):
             return JsonResponse({'html': html}, status=200)
         else:
             return JsonResponse({'form_error': 'Number is not valid'}, status=203)
+
+
+class FavoriteItemsListView(LoginRequiredMixin, ListView):
+    template_name = 'games/favorites.html'
+    model = FavoriteItem
+    context_object_name = 'favorite_items'
+
+
+    def get_queryset(self):
+        return super().get_queryset().filter(user = self.request.user).select_related('game')
+    
+
+class FavoriteItemView(LoginRequiredMixin, View):
+    model = FavoriteItem
+
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        try:
+            game = Game.objects.get(pk = kwargs['pk'])
+        except Game.DoesNotExist:
+            return JsonResponse({'error': 'Game does not exist'}, status=203)
+
+        try:
+            favorite = self.model.objects.get(user=user, game=game)
+            favorite.delete()
+            return JsonResponse({'success': 'Delete'}, status=200)
+        except self.model.DoesNotExist:
+            favorite = self.model.objects.create(user=user, game=game)
+            return JsonResponse({'success': 'Create'}, status=200)

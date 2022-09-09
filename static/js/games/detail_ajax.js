@@ -74,7 +74,9 @@ document.querySelector("body").addEventListener('click', function(e) {
             if(comment.children[i].classList.contains("comment_edit_form")){
                 var all = document.querySelectorAll(".comment_edit_form")
                 for (let j = 0; j < all.length; j++) {
-                    all[j].classList.remove("active")
+                    if (all[j] != comment.children[i]) {
+                        all[j].classList.remove("active")
+                    }
                 }
                 comment.children[i].classList.toggle("active")
             }

@@ -23,3 +23,8 @@
 .comment_edit_form.active{
     left: 55px;
 }
+.comment_form{
+    max-width: 100%;
+    width: calc(100% - 20px);
+    margin: 10px;
+}

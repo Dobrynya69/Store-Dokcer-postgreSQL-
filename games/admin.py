@@ -1,7 +1,10 @@
-from telnetlib import GA
 from django.contrib import admin
 from django.contrib.admin import ModelAdmin
 from .models import *
+
+class FavoriteItemInline(admin.TabularInline):
+    model = FavoriteItem
+
 
 class CommentInline(admin.TabularInline):
     model = Comment
@@ -24,6 +27,7 @@ class StudioAdmin(ModelAdmin):
     inlines = [GameInline,]
 
 
+admin.site.register(FavoriteItem)
 admin.site.register(Grade)
 admin.site.register(Comment)
 admin.site.register(Game, GameAdmin)

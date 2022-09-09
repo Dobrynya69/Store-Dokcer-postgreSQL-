@@ -45,6 +45,9 @@
                                         <li>
                                             <a class="dropdown-item" href="{% url 'user_edit' pk=user.pk%}">Edit</a>
                                         </li>
+                                        <li>
+                                            <a class="dropdown-item" href="{% url 'favorites'%}">Favorites</a>
+                                        </li>
                                     {% else %}
                                         <li>
                                             <a class="dropdown-item" href="{% url 'account_login' %}">Login</a>

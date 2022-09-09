@@ -1,25 +1,17 @@
 services:
-  db:
-    image: postgres:13
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
-    environment:
-      - "POSTGRES_HOST_AUTH_METHOD=trust"
-      
   web:
     build: .
     command: gunicorn gamestore_project.wsgi -b 0.0.0.0:8000 
     environment:
-      - DEBUG=1
+      - DEBUG=0
       - EMAIL_HOST_USER=djangoemailsends@gmail.com
       - EMAIL_HOST_PASSWORD=qreppppnvrttqrym
-      - ENVIRONMENT=development
-    volumes:
-      - .:/code
+      - ENVIRONMENT=production
     ports:
       - 8000:8000
     depends_on:
       - db
-
-volumes:
-  postgres_data:
+  db:
+    image: postgres:13
+    environment:
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
