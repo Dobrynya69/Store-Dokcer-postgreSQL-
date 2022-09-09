@@ -15,16 +15,17 @@ SORT_CHOICES =(
 def studio_choices():
     STUDIO_CHOICES = []
     studios = []
-    if Studio:
+    try:
         for studio in Studio.objects.all():
             studios.append(studio.pk)
+    except:
+        return (("ZERO", "ZERO"),)
 
-        for studio_pk in studios:
-            STUDIO_CHOICES.append((studio_pk, Studio.objects.get(pk=studio_pk).name))
+    for studio_pk in studios:
+        STUDIO_CHOICES.append((studio_pk, Studio.objects.get(pk=studio_pk).name))
 
-        return tuple(STUDIO_CHOICES)
-    else:
-        return (('Zero', 'Zero'),)
+    return tuple(STUDIO_CHOICES)
+
 
 
 class GameSortForm(forms.Form):
