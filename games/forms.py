@@ -1,3 +1,4 @@
+from ast import Return
 from django import forms
 from .models import *
 
@@ -14,13 +15,16 @@ SORT_CHOICES =(
 def studio_choices():
     STUDIO_CHOICES = []
     studios = []
-    for studio in Studio.objects.all():
-        studios.append(studio.pk)
+    if Studio:
+        for studio in Studio.objects.all():
+            studios.append(studio.pk)
 
-    for studio_pk in studios:
-        STUDIO_CHOICES.append((studio_pk, Studio.objects.get(pk=studio_pk).name))
+        for studio_pk in studios:
+            STUDIO_CHOICES.append((studio_pk, Studio.objects.get(pk=studio_pk).name))
 
-    return tuple(STUDIO_CHOICES)
+        return tuple(STUDIO_CHOICES)
+    else:
+        return (('Zero', 'Zero'),)
 
 
 class GameSortForm(forms.Form):
