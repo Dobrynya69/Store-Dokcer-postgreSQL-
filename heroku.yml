@@ -9,4 +9,4 @@ release:
   command:
     - python manage.py collectstatic --noinput
 run:
-  web: gunicorn gamestore_project.wsgi
+  web: gunicorn project.wsgi
