@@ -1,0 +1,16 @@
+.card{
+    width: calc(100% - 20px);
+    margin: 10px;
+    display: flex;
+    flex-direction: row;
+}
+.game_image{
+    width: calc(30% - 20px);
+    height: calc(auto - 20px);
+    object-fit: cover;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.666);
+}
+.favorite-button{
+    margin: 10px 0;
+}
