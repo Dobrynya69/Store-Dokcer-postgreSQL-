@@ -11,8 +11,4 @@
         <h5>Oh no! You don`t authenticated.</h5>
         <h6>You can <a href="{% url 'account_signup' %}">Sign Up</a> or <a href="{% url 'account_login' %}">LogIn</a></h6>
     {% endif %}
-    <form action="{% url 'home' %}" method="POST">
-        {% csrf_token %}
-        <input type="submit" value="send">
-    </form>
 {% endblock content %}
