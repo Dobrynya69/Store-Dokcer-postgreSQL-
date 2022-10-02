@@ -12,19 +12,17 @@ SORT_CHOICES =(
 )
 
 
-def studio_choices():
-    STUDIO_CHOICES = []
-    studios = []
-    for studio in Studio.objects.all():
-        studios.append(studio.pk)
-    for studio_pk in studios:
-        STUDIO_CHOICES.append((studio_pk, Studio.objects.get(pk=studio_pk).name))
-
-    return tuple(STUDIO_CHOICES)
-
-
-
 class GameSortForm(forms.Form):
+    def studio_choices(self):
+        STUDIO_CHOICES = []
+        studios = []
+        for studio in Studio.objects.all():
+            studios.append(studio.pk)
+        for studio_pk in studios:
+            STUDIO_CHOICES.append((studio_pk, Studio.objects.get(pk=studio_pk).name))
+
+        return tuple(STUDIO_CHOICES)
+
     name = forms.CharField(max_length=260, required=False, widget=forms.TextInput(attrs={'placeholder':'Enter name of the game'}))
     order = forms.ChoiceField(choices=SORT_CHOICES, required=False)
     studio = forms.MultipleChoiceField(
@@ -32,6 +30,8 @@ class GameSortForm(forms.Form):
             choices = studio_choices(),
             required=False,
     )
+
+    
 
 
 class CommentCreateForm(forms.Form):
