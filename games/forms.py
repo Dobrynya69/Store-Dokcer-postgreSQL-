@@ -10,26 +10,34 @@ SORT_CHOICES =(
     ('year', 'Year↓'),
     ('-year', 'Year↑'),
 )
+def studio_choices():
+    STUDIO_CHOICES = []
+    studios = []
+    for studio in Studio.objects.all():
+        studios.append(studio.pk)
+    for studio_pk in studios:
+        STUDIO_CHOICES.append((studio_pk, Studio.objects.get(pk=studio_pk).name))
+
+    return tuple(STUDIO_CHOICES)
 
 
 class GameSortForm(forms.Form):
-    def studio_choices(self):
-        STUDIO_CHOICES = []
-        studios = []
-        for studio in Studio.objects.all():
-            studios.append(studio.pk)
-        for studio_pk in studios:
-            STUDIO_CHOICES.append((studio_pk, Studio.objects.get(pk=studio_pk).name))
-
-        return tuple(STUDIO_CHOICES)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["studio"] = forms.MultipleChoiceField(
+                                widget = forms.CheckboxSelectMultiple,
+                                choices = studio_choices(),
+                                required=False,
+                            )
 
     name = forms.CharField(max_length=260, required=False, widget=forms.TextInput(attrs={'placeholder':'Enter name of the game'}))
     order = forms.ChoiceField(choices=SORT_CHOICES, required=False)
     studio = forms.MultipleChoiceField(
-            widget = forms.CheckboxSelectMultiple,
-            choices = studio_choices(),
-            required=False,
-    )
+                widget = forms.CheckboxSelectMultiple,
+                choices = studio_choices(),
+                required=False,
+            )
+    
 
     
 

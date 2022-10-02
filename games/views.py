@@ -73,7 +73,7 @@ class GamesListView(View):
         objects = self.model.objects.order_by('name').select_related('studio')
         paginator = Paginator(objects, self.max_objects)
         end_page = paginate_count(paginator)
-
+        
         return render(
             request=request,
             template_name="games/list.html",
